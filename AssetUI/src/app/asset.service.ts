@@ -54,5 +54,17 @@ export class AssetService {
     return this.http.post<Asset>(`${this.baseApiUrl}/assets`, asset);
   }
 
+  getAsset(id: number): Observable<Asset> {
+    return this.http.get<Asset>(`${this.baseApiUrl}/assets/${id}`);
+  }
+
+  updateAsset(id: number, asset: Partial<Asset>): Observable<Asset> {
+    return this.http.put<Asset>(`${this.baseApiUrl}/assets/${id}`, asset);
+  }
+
+  deleteAsset(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseApiUrl}/assets/${id}`);
+  }
+
   // ... (Delete/Update Methods คงเดิมตามหลัก CRUD ใน ASP.NET Core in Action บทที่ 12)
 }
