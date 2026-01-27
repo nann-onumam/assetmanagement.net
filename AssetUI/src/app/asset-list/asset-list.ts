@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { AssetService, Asset } from '../asset.service';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-asset-list',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, TableModule, ButtonModule],
   templateUrl: './asset-list.html',
   styleUrl: './asset-list.scss',
 })
