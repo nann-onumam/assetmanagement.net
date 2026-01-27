@@ -36,7 +36,6 @@ app.UseCors("AllowAll");
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AssetDbContext>();
-    db.Database.EnsureCreated();
 
     // Seed data
     if (!db.Categories.Any())
