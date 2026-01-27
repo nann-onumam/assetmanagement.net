@@ -31,4 +31,4 @@ public class Asset
     
     public int CategoryId { get; set; } 
     public Category Category { get; set; } = null!; // ใช้ null! เพื่อบอก Compiler ว่าจะไม่มีค่า null แน่นอน (เพราะมี CategoryId)
-}
+} 
