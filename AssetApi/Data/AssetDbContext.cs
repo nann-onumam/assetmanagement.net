@@ -3,25 +3,37 @@ using AssetApi.Models;
 
 namespace AssetApi.Data;
 
-public class AssetDbContext : DbContext
-{
-    public AssetDbContext(DbContextOptions<AssetDbContext> options)
-        : base(options)
-    {
-    }
+// ==================================================================================
+// 1. DATABASE CONTEXT CONFIGURATION
+// ==================================================================================
 
-    public DbSet<Category> Categories { get; set; } = null!;
-    public DbSet<Asset> Assets { get; set; } = null!;
+// [บทที่ 12: Interacting with a database using EF Core - Section 12.2.2 Creating a DbContext]
+// DbContext คือหัวใจสำคัญในการจัดการ Sessions กับฐานข้อมูล
+public class AssetDbContext(DbContextOptions<AssetDbContext> options) : DbContext(options)
+{
+    // [บทที่ 12.2.1 Defining the data model] - การใช้ DbSet เพื่อแทนค่าตารางใน Database
+    // [Programming Logic and Design, บทที่ 2: Elements of High-Quality Programs] - ตั้งชื่อให้สื่อความหมาย (Plural naming)
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<Asset> Assets => Set<Asset>();
+
+    // ==================================================================================
+    // 2. MODEL MAPPING & RELATIONSHIPS
+    // ==================================================================================
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // [ASP.NET Core in Action, บทที่ 12.3: Mapping a model to a database]
+        // การใช้ Fluent API เพื่อควบคุมคุณลักษณะของ Schema ได้ละเอียดกว่า DataAnnotations
         base.OnModelCreating(modelBuilder);
 
-        // กำหนดความสัมพันธ์ให้ชัดเจน (ตามหลัก Head First SQL)
+        // [Head First SQL, บทที่ 7: Multi-table Database Design - Section: Foreign Keys]
+        // การกำหนดความสัมพันธ์ One-to-Many เพื่อรักษาความสมบูรณ์ของข้อมูล (Referential Integrity)
         modelBuilder.Entity<Asset>()
             .HasOne(a => a.Category)
             .WithMany(c => c.Assets)
             .HasForeignKey(a => a.CategoryId)
-            .OnDelete(DeleteBehavior.Restrict); // ป้องกันข้อมูลกำพร้า (Orphaned Data)
+            // [Head First SQL, บทที่ 7: Deleting data with relationships]
+            // Restrict: ป้องกันข้อมูลกำพร้า (Orphaned Data) โดยห้ามลบ Category หากยังมี Asset ผูกอยู่
+            .OnDelete(DeleteBehavior.Restrict); 
     }
 }
