@@ -49,7 +49,7 @@ public class AssetsController(AssetDbContext context) : ControllerBase
     {
         // [บทที่ 12.4.1 Adding data to the database] - บันทึกวัตถุใหม่ลงในตาราง
         context.Assets.Add(asset);
-        await context.SaveChanges(); // [บทที่ 12.4: Saving Data] - ยืนยันการเปลี่ยนแปลง
+        await context.SaveChangesAsync(); // [บทที่ 12.4: Saving Data] - ยืนยันการเปลี่ยนแปลง
 
         return CreatedAtAction(nameof(GetAsset), new { id = asset.Id }, asset);
     }

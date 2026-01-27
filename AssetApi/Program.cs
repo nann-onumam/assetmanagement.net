@@ -14,11 +14,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// [บทที่ 12: Interacting with Python and EF Core] - การตั้งค่า DbContext สำหรับ MySQL 
-// การเปลี่ยน Provider จาก SQLite เป็น MySQL ตามความต้องการของโครงการ
+// [บทที่ 12: Interacting with Python and EF Core] - การตั้งค่า DbContext สำหรับ SQLite
+// ใช้ SQLite สำหรับการพัฒนาและทดสอบได้ง่าย ไม่ต้องติดตั้ง MySQL Server
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AssetDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseSqlite(connectionString));
 
 // [บทที่ 18: Securing your application - Section 18.4 CORS] - อนุญาตให้ Angular เข้าถึง API
 builder.Services.AddCors(options =>
