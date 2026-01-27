@@ -1,30 +1,32 @@
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
+/* PrimeNG DataTable Custom Styling */
+:host ::ng-deep {
+  .p-datatable {
+    .p-datatable-thead > tr > th {
+      background-color: #f3f4f6;
+      font-weight: 600;
+      padding: 1rem;
+    }
 
-.table th, .table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
+    .p-datatable-tbody > tr {
+      &:hover {
+        background-color: #f9fafb;
+      }
 
-.table th {
-  background-color: #f2f2f2;
-}
+      > td {
+        padding: 1rem;
+      }
+    }
+  }
 
-.btn {
-  display: inline-block;
-  padding: 10px 15px;
-  margin-bottom: 20px;
-  text-decoration: none;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+  .p-toolbar {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem 1.5rem;
+  }
 
-.btn-primary {
-  background-color: #007bff;
-  color: white;
+  .surface-section {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+  }
 }

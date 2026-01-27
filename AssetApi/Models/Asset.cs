@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AssetApi.Models;
 
@@ -10,7 +11,9 @@ namespace AssetApi.Models;
 public class Category 
 {
     // [บทที่ 7: Primary Keys] - การกำหนด Key หลักเพื่อให้ข้อมูลในแต่ละ Row ไม่ซ้ำกัน
-    public int Id { get; init; } 
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; } 
 
     //
     // [บทที่ 6: Validation: monitoring and reporting on user input] - การใช้ DataAnnotations เพื่อดักจับข้อมูล
@@ -26,7 +29,9 @@ public class Asset
 {
     //
     // [บทที่ 2: Elements of High-Quality Programs] - การตั้งชื่อตัวแปรที่สื่อความหมาย (Self-Documenting Code)
-    public int Id { get; init; }
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
     
     [Required, StringLength(100)]
     public required string Name { get; set; }

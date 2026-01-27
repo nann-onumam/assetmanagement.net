@@ -1,26 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Asset } from './models/asset';
+import { Category } from './models/category';
 
 // ==================================================================================
-// 1. DATA MODELS & INTERFACES
+// ASSET MANAGEMENT SERVICE
 // ==================================================================================
+// Provides CRUD operations for assets and categories.
+// Handles HTTP communication with the .NET backend API.
 
-// [บทที่ 12: Object-Oriented Programming] - การกำหนดโครงสร้างวัตถุ (Data Structures)
-export interface Category {
-  id: number;
-  name: string;
-}
-
-export interface Asset {
-  id: number;
-  name: string;
-  description: string;
-  model: string;
-  categoryId: number;
-  category?: Category;
-}
-
+// ==================================================================================
+// SERVICE IMPLEMENTATION
 // ==================================================================================
 // 2. SERVICE DECORATOR & DI
 // ==================================================================================

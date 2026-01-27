@@ -1,0 +1,38 @@
+/* Example: Using Tailwind CSS with PrimeNG */
+
+/* Tailwind CSS utility classes can be used alongside PrimeNG components */
+.example-card {
+  @apply bg-white rounded-lg shadow-md p-6 border border-gray-200;
+}
+
+.example-button {
+  @apply bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition-colors duration-200;
+}
+
+.example-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.example-text {
+  @apply text-gray-700 leading-relaxed;
+}
+
+/* Custom responsive utilities */
+.responsive-container {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Flexbox utilities with PrimeNG */
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+/* Spacing utilities */
+.spacing-section {
+  @apply py-8 lg:py-12;
+}
+
+/* PrimeNG + Tailwind combinations */
+.p-button-tailwind {
+  @apply p-button p-button-primary bg-blue-600 hover:bg-blue-700 border-blue-600 hover:border-blue-700;
+}

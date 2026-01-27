@@ -9,8 +9,12 @@ namespace AssetApi.Data;
 
 // [บทที่ 12: Interacting with a database using EF Core - Section 12.2.2 Creating a DbContext]
 // DbContext คือหัวใจสำคัญในการจัดการ Sessions กับฐานข้อมูล
-public class AssetDbContext(DbContextOptions<AssetDbContext> options) : DbContext(options)
+public class AssetDbContext : DbContext
 {
+    public AssetDbContext(DbContextOptions<AssetDbContext> options) : base(options)
+    {
+    }
+
     // [บทที่ 12.2.1 Defining the data model] - การใช้ DbSet เพื่อแทนค่าตารางใน Database
     // [Programming Logic and Design, บทที่ 2: Elements of High-Quality Programs] - ตั้งชื่อให้สื่อความหมาย (Plural naming)
     public DbSet<Category> Categories => Set<Category>();
