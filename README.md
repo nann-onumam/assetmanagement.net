@@ -1,7 +1,7 @@
 Asset Management System (Internal Tool)
 🧠 Logic & Architecture
 โปรเจกต์นี้แยกส่วนการทำงานชัดเจนตามหลัก 
-**Separation of Concerns**:
+Separation of Concerns:
  - Backend: สถาปัตยกรรม REST API บน .NET 8 เน้นความเร็วและ Middleware ที่จัดการ Exception แบบ Global
  - Frontend: Angular 21 (Latest) ร่วมกับ PrimeNG เพื่อสร้าง UI ที่เป็น State-driven และ Responsive
  - Database: SQLite สำหรับ Lightweight implementation พร้อมระบบ Migration ที่ควบคุม Version ของ Schema ได้ 100%
@@ -23,7 +23,6 @@ Asset Management System (Internal Tool)
 1. Database Initialization (Bash)
 "cd AssetApi
 dotnet ef database update"
-
  - Tech Note: คำสั่งนี้จะทำการสร้าง "AssetManagement.db" และ Execute Seed Logic เพื่อเตรียม Category พื้นฐาน (Electronics, Furniture, Vehicles) ให้พร้อมใช้งานทันที
 
 2. Services Startup
