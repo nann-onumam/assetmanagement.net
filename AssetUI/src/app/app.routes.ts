@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
+import { RenderMode, ServerRoute } from '@angular/ssr';
 import { AssetList } from './asset-list/asset-list';
 import { AssetFormComponent } from './asset-form/asset-form';
+import { AssetProfileComponent } from './asset-profile/asset-profile';
 
 // ==================================================================================
 // CONFIGURING APPLICATION ROUTES
@@ -19,18 +21,18 @@ export const routes: Routes = [
   },
 
   //
+  // [บทที่ 7: Multi-table Database Design - Section: Foreign Keys and Relationships]
+  // การใช้พารามิเตอร์ :id (เสมือน Primary Key ใน SQL) เพื่อระบุและเข้าถึงข้อมูลเฉพาะรายการ
+  { 
+    path: 'assets/profile/:id',
+    component: AssetProfileComponent
+  },
+
+  //
   // [บทที่ 5: MVP and Experiments - Section: Outcomes Over Output]
   // ออกแบบเส้นทางที่มุ่งเน้นไปยังผลลัพธ์ที่ผู้ใช้ต้องการทำสำเร็จ (เช่น การเพิ่มสินทรัพย์ใหม่) เพื่อลดความซับซ้อน
   { 
     path: 'assets/add', 
-    component: AssetFormComponent 
-  },
-
-  //
-  // [บทที่ 7: Multi-table Database Design - Section: Foreign Keys and Relationships]
-  // การใช้พารามิเตอร์ :id (เสมือน Primary Key ใน SQL) เพื่อระบุและเข้าถึงข้อมูลเฉพาะรายการได้อย่างถูกต้อง
-  { 
-    path: 'assets/edit/:id', 
     component: AssetFormComponent 
   },
 
@@ -47,5 +49,12 @@ export const routes: Routes = [
   { 
     path: '**', 
     redirectTo: '/assets' 
+  }
+];
+
+export const serverRoutes: ServerRoute[] = [
+  {
+    path: 'assets/profile/:id',
+    renderMode: RenderMode.Client
   }
 ];

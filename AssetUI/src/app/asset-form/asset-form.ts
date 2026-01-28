@@ -4,13 +4,8 @@ import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angula
 import { AssetService } from '../asset.service';
 import { Asset } from '../models/asset';
 import { Category } from '../models/category';
-import { DialogModule } from 'primeng/dialog';
-import { SelectModule } from 'primeng/select';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-asset-form',
@@ -18,11 +13,6 @@ import { MessageService } from 'primeng/api';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    DialogModule,
-    SelectModule,
-    InputTextModule,
-    InputNumberModule,
-    ButtonModule,
     ToastModule
   ],
   providers: [MessageService],
@@ -42,9 +32,10 @@ export class AssetFormComponent implements OnInit, OnChanges {
   categories: Category[] = [];
   isEditMode = false;
   isSubmitting = false;
+  form!: FormGroup;
 
   assetForm: FormGroup = this.fb.group({
-    id: [0],
+    id: [null],
     name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     model: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
     description: ['', [Validators.maxLength(500)]],
@@ -52,8 +43,24 @@ export class AssetFormComponent implements OnInit, OnChanges {
     value: [0, [Validators.required, Validators.min(0)]]
   });
 
+  closeModal(): void {
+    this.visible = false;
+    this.visibleChange.emit(false);
+    this.resetForm();
+  }
+
+  onBackdropClick(): void {
+    this.closeModal();
+  }
+
   ngOnInit(): void {
     this.loadCategories();
+    
+    // If editingAsset is provided, populate the form
+    if (this.editingAsset) {
+      this.isEditMode = true;
+      this.populateFormWithAsset(this.editingAsset);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -95,7 +102,7 @@ export class AssetFormComponent implements OnInit, OnChanges {
 
   resetForm(): void {
     this.assetForm.reset({
-      id: 0,
+      id: null,
       name: '',
       model: '',
       description: '',
@@ -114,7 +121,23 @@ export class AssetFormComponent implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
+    console.log('Form validity:', this.assetForm.valid);
+    console.log('Form errors:', this.assetForm.errors);
+    
+    // Log each field's validity
+    Object.keys(this.assetForm.controls).forEach(key => {
+      const control = this.assetForm.get(key);
+      console.log(`Field ${key}:`, {
+        valid: control?.valid,
+        errors: control?.errors,
+        value: control?.value,
+        touched: control?.touched,
+        dirty: control?.dirty
+      });
+    });
+
     if (this.assetForm.invalid) {
+      console.warn('Form is invalid, showing validation error message');
       this.messageService.add({
         severity: 'error',
         summary: 'Validation Error',
@@ -125,10 +148,19 @@ export class AssetFormComponent implements OnInit, OnChanges {
 
     this.isSubmitting = true;
     const formValue = this.assetForm.value;
+    
+    // Explicitly cast numeric values to ensure .NET type compatibility
+    const payload = {
+      ...formValue,
+      categoryId: Number(formValue.categoryId),
+      value: Number(formValue.value)
+    };
+    
+    console.log('Payload being sent to API:', payload);
 
-    if (this.isEditMode && formValue.id) {
+    if (this.isEditMode && payload.id) {
       // Update existing asset
-      this.assetService.updateAsset(formValue.id, formValue).subscribe({
+      this.assetService.updateAsset(payload.id, payload).subscribe({
         next: (updatedAsset) => {
           this.messageService.add({
             severity: 'success',
@@ -141,18 +173,37 @@ export class AssetFormComponent implements OnInit, OnChanges {
         },
         error: (err) => {
           console.error('Error updating asset', err);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to update asset'
-          });
+          
+          // Extract and log validation errors from backend
+          if (err.error && err.error.errors) {
+            console.log('Validation errors:', err.error.errors);
+            const errorMessages = Object.entries(err.error.errors)
+              .map(([field, messages]: [string, any]) => 
+                `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`
+              )
+              .join('\n');
+            
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Validation Error',
+              detail: errorMessages,
+              sticky: true
+            });
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to update asset'
+            });
+          }
           this.isSubmitting = false;
         }
       });
     } else {
-      // Create new asset
-      const newAsset = { ...formValue, id: undefined };
-      this.assetService.createAsset(newAsset).subscribe({
+      // Create new asset - remove ID before sending
+      const { id, ...assetData } = payload;
+      console.log('Creating asset with data:', assetData);
+      this.assetService.createAsset(assetData).subscribe({
         next: (createdAsset) => {
           this.messageService.add({
             severity: 'success',
@@ -165,11 +216,29 @@ export class AssetFormComponent implements OnInit, OnChanges {
         },
         error: (err) => {
           console.error('Error creating asset', err);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to create asset'
-          });
+          
+          // Extract and log validation errors from backend
+          if (err.error && err.error.errors) {
+            console.log('Validation errors:', err.error.errors);
+            const errorMessages = Object.entries(err.error.errors)
+              .map(([field, messages]: [string, any]) => 
+                `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`
+              )
+              .join('\n');
+            
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Validation Error',
+              detail: errorMessages,
+              sticky: true
+            });
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to create asset'
+            });
+          }
           this.isSubmitting = false;
         }
       });

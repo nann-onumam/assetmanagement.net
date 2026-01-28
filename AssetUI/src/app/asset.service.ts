@@ -20,7 +20,7 @@ import { Category } from './models/category';
 // เพื่อให้คลาสอื่นเรียกใช้งาน Service นี้ได้โดยไม่ต้องสร้าง Object เอง
 @Injectable({ providedIn: 'root' })
 export class AssetService {
-  private baseApiUrl = 'http://localhost:5195/api'; // [บทที่ 2: Elements of High-Quality Programs] - ใช้ตัวแปรเก็บค่าคงที่
+  private baseApiUrl = 'http://localhost:5000/api'; // [บทที่ 2: Elements of High-Quality Programs] - ใช้ตัวแปรเก็บค่าคงที่
 
   // [บทที่ 10.2.1 Constructor injection] - ฉีด HttpClient เข้ามาเพื่อใช้รับ-ส่งข้อมูลกับ Server
   constructor(private http: HttpClient) {}

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AssetApi.Models;
 
@@ -22,6 +23,7 @@ public class Category
 
     //
     // [บทที่ 12: Object-Oriented Programming] - การสร้าง Collection เพื่อเก็บวัตถุที่มีความสัมพันธ์กัน
+    [JsonIgnore]
     public ICollection<Asset> Assets { get; } = new HashSet<Asset>(); 
 }
 
@@ -56,5 +58,5 @@ public class Asset
 
     //
     // [บทที่ 12.2: Defining the data model] - การสร้าง Navigation Property สำหรับ EF Core
-    public Category Category { get; set; } = null!; 
+    public Category? Category { get; set; }
 }

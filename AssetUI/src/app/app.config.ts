@@ -1,8 +1,9 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
+import { MatDialogModule } from '@angular/material/dialog';
 import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
@@ -14,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withFetch()),
     provideAnimationsAsync(),
+    importProvidersFrom(MatDialogModule),
     providePrimeNG({
       theme: {
         preset: Aura,
@@ -25,7 +27,7 @@ export const appConfig: ApplicationConfig = {
           }
         }
       }
-    }),
-    provideClientHydration(withEventReplay())
+    })
+    // provideClientHydration(withEventReplay()) - Removed to prevent hydration warnings
   ]
 };
